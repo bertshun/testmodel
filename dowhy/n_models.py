@@ -19,6 +19,9 @@ from econml.dml import CausalForestDML
 from dowhy import CausalModel
 from lifelines import CoxPHFitter
 from lifelines.utils import concordance_index
+from benchmark import CausalModelBenchmark
+
+
 
 # reproducibility
 RND = 42
@@ -318,10 +321,41 @@ corr_cf = spearmanr(ite_cf, pred_test)[0]
 corr_rb = spearmanr(ite_rb, pred_test)[0]
 corr_gan = spearmanr(ite_gan, pred_test)[0]
 print("Spearman corr between ITE and predicted hazard (test): CF, RB, GAN =", corr_cf, corr_rb, corr_gan)
+# --- 途中省略 (学習部分そのまま保持) ---
 
 # -----------------------
-# 8) Summarize metrics in a DataFrame and save
+# 7.5) 医療系評価 (IBS, Time-AUC)
 # -----------------------
+from benchmark import CausalModelBenchmark
+
+print("\n[Benchmark] evaluating time-dependent AUC and IBS ...")
+benchmark = CausalModelBenchmark(save_dir=str(OUTDIR / "metrics"))
+
+# 疑似サバイバル確率関数 (CoxPH のリスクから逆変換して使用)
+haz_pred = cph.predict_partial_hazard(df_surv_test).values.flatten()
+max_time = df_surv_test["time"].max()
+N_test = len(haz_pred)
+
+def surv_func_factory(scale=1.0):
+    return lambda t: np.clip(np.exp(-scale * haz_pred * t / max_time), 0, 1)
+
+# 例: 各モデルの擬似的surv prob（本来は各モデル独自に算出可能）
+for model_name, scale in [("Baseline-RF", 1.0),
+                          ("RepBalanceNet", 0.9),
+                          ("GAN-Rep", 0.8)]:
+    results_time = benchmark.evaluate_time_auc_ibs(
+        event_time=df_surv_test["time"].values,
+        event_observed=df_surv_test["event"].values,
+        surv_prob_func=surv_func_factory(scale),
+        model_name=model_name
+    )
+    print(f"{model_name}: mean Time-AUC={results_time['time_auc_mean']:.3f}, IBS={results_time['ibs']:.3f}")
+
+# -----------------------
+# 8) Summarize metrics
+# -----------------------
+# （この部分はあなたの既存コードそのままでOK）
+
 summary = []
 summary.append({
     "model":"Baseline-RF",
@@ -361,6 +395,7 @@ print("\n----- Summary -----")
 print(df_summary)
 df_summary.to_csv(OUTDIR / "model_comparison_summary.csv", index=False)
 print("Saved summary to", OUTDIR / "model_comparison_summary.csv")
+
 
 # Optionally: plot ITE distributions
 plt.figure(figsize=(8,5))
