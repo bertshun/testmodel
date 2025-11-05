@@ -17,8 +17,8 @@ subgraph B1["Docker Container Cluster"]
 end
 
 subgraph B2["Google Instance Cluster "] 
-    B2b["ETL Integration and Aggregation"]
-    B2c["Statistical Preprocessing"]
+    B2a["ETL Integration and Aggregation"]
+    B2b["Statistical Preprocessing"]
 end
 
 %% =========================
