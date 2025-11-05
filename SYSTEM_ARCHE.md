@@ -17,6 +17,7 @@ subgraph B1["Docker Container Cluster"]
 end
 
 subgraph B2["Google Instance Cluster\n(Dataflow or GCE Workers)"]
+
     B2a["ETL Integration and Aggregation"]
     B2b["Statistical Preprocessing"]
 end
