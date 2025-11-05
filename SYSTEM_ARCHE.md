@@ -1,47 +1,47 @@
-## 🧩 Causal Discovery Pipeline Architecture (Mermaid UML - Balanced Layout)
+## 🧩 Causal Discovery Pipeline Architecture (Mermaid UML)
 
 ```mermaid
-flowchart LR
+flowchart TB
 
 %% =========================
 %% Control Plane
 %% =========================
-A["Master Control Plane        \n(MCP Server / Scheduler / Metric Logging / Orchestrator)"]
+A["Master Control Plane\n(MCP Server / Scheduler / Metric Logging / Orchestrator)"]
 
 %% =========================
 %% Data Processing Layer
 %% =========================
-subgraph B1["Docker Container Cluster              "]
-    B1a["CSV Normalization            "]
-    B1b["Feature Extraction           "]
+subgraph B1["Docker Container Cluster"]
+    B1a["CSV Normalization"]
+    B1b["Feature Extraction"]
 end
 
-subgraph B2["Google Instance Cluster            \n(Dataflow or GCE Workers)"]
-    B2a["ETL Integration / Aggregation          "]
-    B2b["Statistical Preprocessing              "]
+subgraph B2["Google Instance Cluster (Dataflow or GCE Workers)"]
+    B2b["ETL Integration and Aggregation"]
+    B2c["Statistical Preprocessing"]
 end
 
 %% =========================
 %% Aggregation Layer
 %% =========================
-C["Aggregation / ETL Engine                \n(Google Instance or Free Server)"]
+C["Aggregation / ETL Engine\n(Google Instance or Free Server)"]
 
 %% =========================
 %% Learning Layer
 %% =========================
-subgraph D1["Local PC                  "]
-    D1a["Causal Model Training          "]
+subgraph D1["Local PC"]
+    D1a["Causal Model Training"]
 end
 
-subgraph D2["Google Colab / Free GPU                "]
-    D2a["Distributed Causal Discovery         "]
-    D2b["Fine-tuning                         "]
+subgraph D2["Google Colab / Free GPU"]
+    D2a["Distributed Causal Discovery"]
+    D2b["Fine-tuning"]
 end
 
 %% =========================
 %% Repository Layer
 %% =========================
-E["Model Repository / Metrics            \n(GCS / MinIO / DVC)"]
+E["Model Repository / Metrics\n(GCS / MinIO / DVC)"]
 
 %% =========================
 %% Connections
