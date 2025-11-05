@@ -1,7 +1,7 @@
 ## 🧩 Causal Discovery Pipeline Architecture (Mermaid UML)
 
 ```mermaid
-flowchart TB
+flowchart LR
 
 %% =========================
 %% Control Plane
@@ -16,9 +16,9 @@ subgraph B1["Docker Container Cluster"]
     B1b["Feature Extraction"]
 end
 
-subgraph B2["Google Instance Cluster (Dataflow or GCE Workers)"]
-    B2b["ETL Integration and Aggregation"]
-    B2c["Statistical Preprocessing"]
+subgraph B2["Google Instance Cluster\n(Dataflow or GCE Workers)"]
+    B2a["ETL Integration / Aggregation"]
+    B2b["Statistical Preprocessing"]
 end
 
 %% =========================
