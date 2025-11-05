@@ -16,7 +16,7 @@ subgraph B1["Docker Container Cluster"]
     B1b["Feature Extraction"]
 end
 
-subgraph B2["Google Instance Cluster "] 
+subgraph B2["Google Instance Cluster"]
     B2a["ETL Integration and Aggregation"]
     B2b["Statistical Preprocessing"]
 end
